@@ -80,3 +80,30 @@ function getBotResponse(message) {
 
     return botResponse;
 }
+import openai from 'openai';
+
+const apiKey = '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';
+const apiEndpoint = 'https://api.openai.com/v1/';
+
+openai.apiKey = apiKey;
+openai.apiBase = apiEndpoint;
+
+async function getResponseFromOpenAI(input) {
+  const prompt = `Usuário: ${input}\nBot: `;
+  const model = 'davinci';
+  const maxTokens = 150;
+
+  const completions = await openai.Completion.create({
+    engine: model,
+    prompt: prompt,
+    maxTokens: maxTokens
+  });
+
+  const message = completions.choices[0].text.trim();
+  return message;
+}
+
+const input = 'Olá, tudo bem?';
+getResponseFromOpenAI(input)
+  .then(response => console.log(response))
+  .catch(err => console.error(err));
